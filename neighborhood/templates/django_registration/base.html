@@ -1,0 +1,34 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  {%if title%}
+
+  <title>{{title}}</title>
+
+  {%endif%}
+
+  {% block styles %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  {% endblock %}
+
+</head>
+
+<body>
+
+  {% block content %}  {%endblock%}
+
+
+  {% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  {% endblock %}
+
+</body>
+
+</html>
