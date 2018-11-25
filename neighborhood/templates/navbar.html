@@ -5,6 +5,7 @@
     <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul class="left hide-on-med-and-down">
         <li><a href="{% url 'businesses' %}">Businesses</a></li>
+        <li> <a href="#contactsmodal" class="modal-trigger">Emergency Contacts</a> </li>
       </ul>
       <a href="{% url 'logout' %}" class="right"><i class="small material-icons">exit_to_app</i></a>
       <a class="right" href="{% url 'edit_profile' user.username %}" style="margin: 10px;"><img src="{% static 'images/user.png' %}" alt="" height="40" width="40"></a>
@@ -12,7 +13,7 @@
           <li><form class="" action="{% url 'search' %}">
             <div id="custom-search-input">
                   <div class="input-group col-md-12 ui-widget">
-                      <input id="search" type="text" class="form-control input-lg" placeholder="Search" name="search" />
+                      <input id="search" type="text" class="form-control input-lg" placeholder="Search business" name="search" />
                   </div>
               </div>
         </form></li>
@@ -27,3 +28,14 @@
     <li><a href="collapsible.html">Javascript</a></li>
     <li><a href="mobile.html">Mobile</a></li>
  </ul>
+
+ <!-- Modal Structure -->
+   <div id="contactsmodal" class="modal">
+     <div class="modal-content">
+       <h4>Emergeny Contacts</h4>
+       <p>Police: 999 <br>Ambulance: 5674 <br>Fire Brigade: 7899</p>
+     </div>
+     <div class="modal-footer">
+       <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+     </div>
+   </div>
