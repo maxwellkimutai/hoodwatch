@@ -7,6 +7,6 @@ urlpatterns = [
     url('^businesses$',views.businesses,name = 'businesses'),
     url('^post/(?P<id>\d+)',views.post,name='post'),
     url(r'^search/$',views.search,name='search'),
-    url('^api/posts/$',views.PostList.as_view())
+    url('^api/businesses/$',views.BusinessList.as_view())
 
 ]
