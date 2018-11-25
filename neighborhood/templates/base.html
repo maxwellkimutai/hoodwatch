@@ -28,32 +28,19 @@
             <script type="text/javascript">
                 $(document).ready(function(){
                     $('.sidenav').sidenav();
-                 });
-                 // $(document).ready(function(){
-                 //    $('input.autocomplete').autocomplete({
-                 //          data: {
-                 //            "Apple": null,
-                 //            "Microsoft": null,
-                 //            "Google": 'https://placehold.it/250x250'
-                 //          },
-                 //        });
-                 //      });
-                  $(document).ready(function () {
                     var posts = []
                     $.ajax({
-                        url: 'http://'+ window.location.host +'/api/posts',
+                        url: 'http://'+ window.location.host +'/api/businesses',
                         success: function (data) {
                             $.each(data, function(index,value) {
-                                posts.push(value['title'])
+                                posts.push(value['name'])
                             });
                             $( "#search" ).autocomplete({
                               source: posts
                             });
                         }
                     });
-
-                });
-
+                 });
             </script>
         {% endblock %}
     </body>
