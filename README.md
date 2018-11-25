@@ -1,5 +1,5 @@
 # Hood Watch
-#### This is application lets users share information in their neighborhood, 5, 2018
+#### This is application lets users share information in their neighborhood, November 25, 2018
 #### By **Maxwell Kimutai**
 ## Description
 This is application lets users share information in their neighborhood.
