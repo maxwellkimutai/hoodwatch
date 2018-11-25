@@ -1,7 +1,12 @@
 from django.shortcuts import render,redirect
+from django.http import HttpResponse,Http404,HttpResponseRedirect
 from .models import UserProfile,Post,Neighborhood,Business,Comment
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm,BusinessForm,PostForm,CommentForm
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializer import BusinessSerializer
+from .email import send_amber_email
 
 # Create your views here.
 @login_required
@@ -23,7 +28,14 @@ def index(request):
             post = form.save(commit=False)
             post.user = current_user
             post.neighborhood = profile.neighborhood
+            post.type = request.POST['type']
             post.save()
+
+            if post.type == '1':
+                recipients = UserProfile.objects.filter(neighborhood=post.neighborhood)
+                for recipient in recipients:
+                    send_amber_email(post.title,post.content,recipient.email)
+
         return redirect('index')
     else:
         form = PostForm()
@@ -33,18 +45,27 @@ def index(request):
 def edit_profile(request,username):
     current_user = request.user
     if request.method == 'POST':
-        profile = UserProfile.objects.get(user=current_user)
-        form = UserProfileForm(request.POST)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = current_user
-            profile.save()
-        return redirect('index')
-    elif UserProfile.objects.filter(user=current_user).exists():
-        profile = UserProfile.objects.get(user=current_user)
-        form = UserProfileForm(instance=profile)
+        try:
+            profile = UserProfile.objects.get(user=current_user)
+            form = UserProfileForm(request.POST,instance=profile)
+            if form.is_valid():
+                profile = form.save(commit=False)
+                profile.user = current_user
+                profile.save()
+            return redirect('index')
+        except:
+            form = UserProfileForm(request.POST)
+            if form.is_valid():
+                profile = form.save(commit=False)
+                profile.user = current_user
+                profile.save()
+            return redirect('index')
     else:
-        form = UserProfileForm()
+        if UserProfile.objects.filter(user=current_user):
+            profile = UserProfile.objects.get(user=current_user)
+            form = UserProfileForm(instance=profile)
+        else:
+            form = UserProfileForm()
     return render(request,'edit_profile.html',{"form":form})
 
 @login_required
@@ -83,3 +104,20 @@ def post(request,id):
     else:
         form = CommentForm()
     return render(request,'post.html',{"post":post,"comments":comments,"form":form})
+
+class BusinessList(APIView):
+    def get(self, request, format=None):
+        all_businesses = Business.objects.all()
+        serializers = BusinessSerializer(all_businesses, many=True)
+        return Response(serializers.data)
+
+@login_required
+def search(request):
+    current_user = request.user
+    if 'search' in request.GET and request.GET["search"]:
+        search_term = request.GET.get("search")
+        businesses = Business.objects.filter(name__icontains=search_term)
+        return render(request,'search.html',{'businesses':businesses})
+    else:
+        message = "You haven't searched for any term"
+        return render(request, 'search.html',{"message":message})
